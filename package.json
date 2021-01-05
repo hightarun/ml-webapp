@@ -1,0 +1,30 @@
+{
+  "name": "next-ts-boiler",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@tensorflow-models/handpose": "0.0.6",
+    "@tensorflow-models/knn-classifier": "^1.2.2",
+    "@tensorflow-models/mobilenet": "^2.0.4",
+    "@tensorflow/tfjs": "^2.8.2",
+    "fingerpose": "0.0.2",
+    "next": "10.0.4",
+    "next-images": "^1.6.2",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "react-webcam": "^5.2.2"
+  },
+  "devDependencies": {
+    "@types/next": "^9.0.0",
+    "@types/node": "^14.14.19",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "sass": "^1.32.0",
+    "typescript": "^4.1.3"
+  }
+}

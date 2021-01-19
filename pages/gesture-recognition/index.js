@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 
@@ -20,6 +20,7 @@ function App() {
   const images = { thumbs_up: thumbs_up, victory: victory };
 
   const runHandpose = async () => {
+    console.log("Loading model");
     const handposeModel = await handpose.load();
     console.log("Handpose model loaded.");
     //  Loop and detect hands
@@ -76,9 +77,13 @@ function App() {
     }
   };
 
-  useEffect(() => {
+  const startHandler = () => {
     runHandpose();
-  }, []);
+  };
+
+  const stopHandler = () => {
+    window.location.reload();
+  };
 
   return (
     <div className={styles.container}>
@@ -86,15 +91,12 @@ function App() {
         <meta name="description" content="Live Webcam Gesture Recognition" />
         <title>Gesture Recognition</title>
       </Head>
-      <header className={styles.header}>
+      <div className={styles.header}>
         <Webcam
           ref={webcamRef}
           style={{
-            position: "absolute",
             marginLeft: "auto",
             marginRight: "auto",
-            left: 0,
-            right: 0,
             textAlign: "center",
             zindex: 9,
             width: 640,
@@ -132,9 +134,18 @@ function App() {
         ) : (
           ""
         )}
-      </header>
-      <div className={styles.home}>
-        <Link href="/"> GO HOME</Link>
+      </div>
+
+      <div className={styles.btnContainer}>
+        <div className={styles.btn}>
+          <button onClick={startHandler}>Start</button>
+        </div>
+        <div className={styles.btn}>
+          <button onClick={stopHandler}>Stop</button>
+        </div>
+        <div className={styles.btn}>
+          <a href="/">GO HOME</a>
+        </div>
       </div>
     </div>
   );

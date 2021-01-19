@@ -15,9 +15,30 @@
   color: white;
 }
 
-.home {
-  position: relative;
-  margin-top: 500px;
+.btnContainer {
+  display: inline-block;
+  padding: 10px 40px;
+  margin: 20px auto;
+}
+
+.btn {
+  float: left;
+  margin: 10px;
+  width: fit-content;
+  padding: 10px;
+  background-color: #008b8b;
+  border-radius: 10px;
+  border: 0.5px solid orange;
+  button {
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+  &:hover {
+    box-shadow: 0 1px 0 2px#00FFFF;
+  }
 }
 
 @media (min-width: 768px) {

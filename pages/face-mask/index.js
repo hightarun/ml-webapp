@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import Head from "next/head";
 import Link from "next/link";
 
@@ -51,69 +51,73 @@ const FaceMask = () => {
     //   train.appendChild(newImage);
     // }
   };
+  const start = async () => {
+    await addImagesToDom();
+    console.log("IMAGES ADDED IN DOM FOR TRAINING");
+    console.log("LOADING MOBILENET MODEL");
+    const model = await mobilenet.load();
+    console.log("MOBILENET MODEL LOADED");
+    await tf.ready();
+    console.log("TENSOR FLOW READY");
+    const knn = knnClassifier.create();
+    console.log("KNN Classifier CREATED");
+    const webCamInput = await createWebcamInput();
 
-  useEffect(() => {
-    const start = async () => {
-      await addImagesToDom();
-      console.log("IMAGES ADDED IN DOM FOR TRAINING");
-      console.log("LOADING MOBILENET MODEL");
-      const model = await mobilenet.load();
-      console.log("MOBILENET MODEL LOADED");
-      await tf.ready();
-      console.log("TENSOR FLOW READY");
-      const knn = knnClassifier.create();
-      console.log("KNN Classifier CREATED");
-      const webCamInput = await createWebcamInput();
-
-      const trainClassifier = async () => {
-        // Train using mask images
-        const mask = document.querySelectorAll(".mask-img"); //const maskImages = trainMaskImg.current.childNodes;
-        mask.forEach((img) => {
-          try {
-            const tfImg = tf.browser.fromPixels(img);
-            const logits = model.infer(tfImg, "conv_preds");
-            knn.addExample(logits, 0); // has mask
-          } catch (error) {
-            console.log(error);
-          }
-        });
-
-        // Train using no mask images
-        const noMask = document.querySelectorAll(".no-mask-img"); //const noMaskImages = trainNoMaskImg.current.childNodes;
-        noMask.forEach((img) => {
-          try {
-            const tfImg = tf.browser.fromPixels(img);
-            const logits = model.infer(tfImg, "conv_preds");
-            knn.addExample(logits, 1); // no mask
-          } catch (error) {
-            console.log(error);
-          }
-        });
-      };
-
-      const webcamLiveDetection = async () => {
-        while (true) {
-          try {
-            if (knn.getNumClasses() > 0) {
-              const img = await webCamInput.capture();
-              const activation = model.infer(img, "conv_preds");
-              const result = await knn.predictClass(activation);
-              img.dispose();
-              setResult(result.label);
-              setProb(result.confidences[result.label]);
-              // Dispose the tensor to release the memory.
-            }
-            await tf.nextFrame();
-          } catch (error) {
-            console.log(error.message);
-          }
+    const trainClassifier = async () => {
+      // Train using mask images
+      const mask = document.querySelectorAll(".mask-img"); //const maskImages = trainMaskImg.current.childNodes;
+      mask.forEach((img) => {
+        try {
+          const tfImg = tf.browser.fromPixels(img);
+          const logits = model.infer(tfImg, "conv_preds");
+          knn.addExample(logits, 0); // has mask
+        } catch (error) {
+          console.log(error);
         }
-      };
-      await trainClassifier();
-      await webcamLiveDetection();
+      });
+
+      // Train using no mask images
+      const noMask = document.querySelectorAll(".no-mask-img"); //const noMaskImages = trainNoMaskImg.current.childNodes;
+      noMask.forEach((img) => {
+        try {
+          const tfImg = tf.browser.fromPixels(img);
+          const logits = model.infer(tfImg, "conv_preds");
+          knn.addExample(logits, 1); // no mask
+        } catch (error) {
+          console.log(error);
+        }
+      });
     };
+
+    const webcamLiveDetection = async () => {
+      while (true) {
+        try {
+          if (knn.getNumClasses() > 0) {
+            const img = await webCamInput.capture();
+            const activation = model.infer(img, "conv_preds");
+            const result = await knn.predictClass(activation);
+            img.dispose();
+            setResult(result.label);
+            setProb(result.confidences[result.label]);
+            // Dispose the tensor to release the memory.
+          }
+          await tf.nextFrame();
+        } catch (error) {
+          console.log(error.message);
+        }
+      }
+    };
+    await trainClassifier();
+    await webcamLiveDetection();
+  };
+
+  const startHandler = () => {
     start();
-  }, []);
+  };
+
+  const stopHandler = () => {
+    window.location.reload();
+  };
 
   return (
     <div className={styles.container}>
@@ -122,8 +126,8 @@ const FaceMask = () => {
         <title>Face Mask Detection</title>
       </Head>
       <div className={styles.trainImage} id="trainImage"></div>
-      <div>
-        <h1 id="head">LIVE MASK DETECTION</h1>
+      <div className={styles.head}>
+        <p>LIVE MASK DETECTION</p>
         <Webcam
           className={styles.webcam}
           id="webcam"
@@ -136,13 +140,19 @@ const FaceMask = () => {
           }}
         />
         <div className={styles.output}>
-          <h3 className={styles.console}>
-            {result === "1" ? <p>NO MASK DETECTED</p> : <p>MASK DETECTED</p>}
-          </h3>
-          <h3 className={styles.console}>{prob}</h3>
+          {result === "1" ? <p>NO MASK DETECTED</p> : <p>MASK DETECTED</p>}
+          <p className={styles.console}>{prob}</p>
         </div>
-        <div>
-          <Link href="/"> GO HOME</Link>
+        <div className={styles.btnContainer}>
+          <div className={styles.btn}>
+            <button onClick={startHandler}>Start</button>
+          </div>
+          <div className={styles.btn}>
+            <button onClick={stopHandler}>Stop</button>
+          </div>
+          <div className={styles.btn}>
+            <a href="/">GO HOME</a>
+          </div>
         </div>
       </div>
     </div>

@@ -1,11 +1,50 @@
 .container {
   padding-right: 15px;
   padding-left: 15px;
+  margin-top: 15vh;
   margin-right: auto;
   margin-left: auto;
 }
 
+.nav {
+  display: inline-block;
+  position: fixed relative;
+  width: 100%;
+  top: 0;
+  height: 12vh;
+  text-align: center;
+  background-color: #ff7f50;
+  p {
+    font-size: 1.8rem;
+    font-weight: bold;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  }
+}
+
+.app {
+  flex-grow: 1;
+  border: 1px solid black;
+  margin: 10px;
+  border-radius: 10px;
+  box-shadow: 0 1px 0 2px #ff7f50;
+  a {
+    img {
+      height: 200px;
+      width: 150px;
+    }
+    p {
+      font-size: 1.2rem;
+      font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+        "Lucida Sans", Arial, sans-serif;
+    }
+  }
+  &:hover {
+    box-shadow: 0 2px 0 4px #ff7f50;
+  }
+}
+
 .content {
+  display: flex;
   text-align: center;
 }
 

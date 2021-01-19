@@ -28,27 +28,61 @@
   }
 }
 
+.btnContainer {
+  display: inline-block;
+  padding: 10px 40px;
+  margin: 20px auto;
+}
+
+.btn {
+  float: left;
+  margin: 10px;
+  width: fit-content;
+  padding: 10px;
+  background-color: #008b8b;
+  border-radius: 10px;
+  border: 0.5px solid orange;
+  button {
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+  &:hover {
+    box-shadow: 0 1px 0 2px#00FFFF;
+  }
+}
+
 .webcam {
   display: block;
 }
 
 .head {
-  color: rgb(32, 22, 22);
-  flex-direction: column;
-}
-
-.console {
-  color: rgb(0, 63, 52);
+  p {
+    width: fit-content;
+    margin: 10px auto;
+    color: #ff4d01;
+    font-weight: bold;
+    font-size: 1.8rem;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
 }
 
 .output {
   margin-top: 5vh;
   display: block;
   background-color: rgb(10, 10, 10);
-  text-align: left;
   padding: 20px;
   height: 150px;
   width: 640px;
   margin-right: auto;
   margin-left: auto;
+
+  p {
+    color: #39ff14;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+      "Lucida Sans", Arial, sans-serif;
+    font-size: 1.2rem;
+  }
 }
